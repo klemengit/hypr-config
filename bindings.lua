@@ -38,19 +38,35 @@ o.bind("ALT + 1", "Browser", { focus = browser_class_pattern, launch = "omarchy-
 o.bind("ALT + 2", "Obsidian", { launch = "obsidian", focus = "^obsidian$" })
 o.bind("ALT + 3", "File manager", { focus = "^org.gnome.Nautilus$", launch = "nautilus" })
 o.bind("ALT + 4", "Tmux", { focus = "org.omarchy.terminal-tmux", launch = "omarchy-launch-terminal-tmux-tagged" })
+o.bind("ALT + 7", "Signal", { omarchy = "signal" })
+o.bind("ALT + 8", "Activity", { tui = "btop" })
 
--- SUPER+H/L move the current workspace to the neighboring monitor, matching
--- the hjkl direction feel from the Ferris Sweep layout. Not workspace
--- cycling (SUPER+TAB already does that, and workspace numbers aren't part
--- of this workflow) - this is "move what I'm looking at to the other
--- screen". Same dispatcher as the default SUPER+SHIFT+ALT+arrow bindings,
--- just on letter keys, no SHIFT+ALT chord needed. Monitors here are laid
+-- SUPER+H/L move the active WINDOW (not the whole workspace) to the
+-- neighboring monitor, matching the hjkl direction feel from the Ferris
+-- Sweep layout. Not workspace cycling (SUPER+TAB already does that, and
+-- workspace numbers aren't part of this workflow) - this is "move what I'm
+-- looking at to the other screen". hl.dsp.window.move({ monitor = ... })
+-- isn't documented anywhere (no Lua source available to read, and
+-- `hyprctl dispatch movewindow mon:l` - the vanilla Hyprland syntax -
+-- doesn't work on this Lua-scripted build); found by testing
+-- `hyprctl dispatch 'hl.dsp.window.move({monitor="l"})'` directly and
+-- confirming with `hyprctl activewindow -j` that only the focused window's
+-- monitor changed, workspace membership untouched. Monitors here are laid
 -- out left-to-right only, so J/K (up/down) are skipped - no vertical
 -- monitor to move to. SUPER+H was unbound by default. SUPER+L was bound to
 -- "Toggle workspace layout" (dwindle/master), which isn't used here.
 hl.unbind("SUPER + L")
-o.bind("SUPER + H", "Move workspace to left monitor", hl.dsp.workspace.move({ monitor = "l" }))
-o.bind("SUPER + L", "Move workspace to right monitor", hl.dsp.workspace.move({ monitor = "r" }))
+o.bind("SUPER + H", "Move window to left monitor", hl.dsp.window.move({ monitor = "l" }))
+o.bind("SUPER + L", "Move window to right monitor", hl.dsp.window.move({ monitor = "r" }))
+
+-- SUPER+SHIFT+H/L move the whole current WORKSPACE to a monitor (as opposed
+-- to SUPER+H/L above, which moves just the active window). Together with
+-- the default SUPER+SHIFT+1-9 ("move window to workspace N"), this covers
+-- the full app-arranging workflow: move a window to the workspace slot you
+-- want it in, then move that workspace to the monitor you want it showing
+-- on. Same dispatcher Omarchy's own SUPER+SHIFT+ALT+arrow bindings use.
+o.bind("SUPER + SHIFT + H", "Move workspace to left monitor", hl.dsp.workspace.move({ monitor = "l" }))
+o.bind("SUPER + SHIFT + L", "Move workspace to right monitor", hl.dsp.workspace.move({ monitor = "r" }))
 
 -- Remove all of Omarchy's preinstalled webapp bindings (ChatGPT, Grok,
 -- Calendar, Email, YouTube, WhatsApp, Google Messages/Photos/Maps, X).

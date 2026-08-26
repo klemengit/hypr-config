@@ -94,7 +94,7 @@ bind_scratchpad("ALT + 2", "Obsidian", "obsidian", "obsidian", "obsidian")
 -- unset), so pin an explicit large centered size instead.
 o.window("obsidian", { float = true, center = true, size = { 1500, 810 } })
 
--- SUPER+H/L move the active WINDOW (not the whole workspace) to the
+-- SUPER+H/J/K/L move the active WINDOW (not the whole workspace) to the
 -- neighboring monitor, matching the hjkl direction feel from the Ferris
 -- Sweep layout. Not workspace cycling (SUPER+TAB already does that, and
 -- workspace numbers aren't part of this workflow) - this is "move what I'm
@@ -105,21 +105,63 @@ o.window("obsidian", { float = true, center = true, size = { 1500, 810 } })
 -- `hyprctl dispatch 'hl.dsp.window.move({monitor="l"})'` directly and
 -- confirming with `hyprctl activewindow -j` that only the focused window's
 -- monitor changed, workspace membership untouched. Monitors here are laid
--- out left-to-right only, so J/K (up/down) are skipped - no vertical
--- monitor to move to. SUPER+H was unbound by default. SUPER+L was bound to
--- "Toggle workspace layout" (dwindle/master), which isn't used here.
+-- out left-to-right only, so J/K (up/down) are dead binds for now (no
+-- vertical monitor to move to) - added anyway for hjkl completeness, ready
+-- for whenever a vertical monitor shows up. SUPER+H was unbound by default.
+-- SUPER+L was bound to "Toggle workspace layout" (dwindle/master), and
+-- SUPER+K to "Keybindings" (still reachable elsewhere via the menu) -
+-- neither used here, both overwritten on purpose.
 hl.unbind("SUPER + L")
+hl.unbind("SUPER + K")
+hl.unbind("SUPER + J") -- was "Toggle window split" - o.bind alone doesn't replace an existing default bind, both would fire
 o.bind("SUPER + H", "Move window to left monitor", hl.dsp.window.move({ monitor = "l" }))
 o.bind("SUPER + L", "Move window to right monitor", hl.dsp.window.move({ monitor = "r" }))
+o.bind("SUPER + K", "Move window to up monitor", hl.dsp.window.move({ monitor = "u" }))
+o.bind("SUPER + J", "Move window to down monitor", hl.dsp.window.move({ monitor = "d" }))
 
--- SUPER+SHIFT+H/L move the whole current WORKSPACE to a monitor (as opposed
--- to SUPER+H/L above, which moves just the active window). Together with
--- the default SUPER+SHIFT+1-9 ("move window to workspace N"), this covers
--- the full app-arranging workflow: move a window to the workspace slot you
--- want it in, then move that workspace to the monitor you want it showing
--- on. Same dispatcher Omarchy's own SUPER+SHIFT+ALT+arrow bindings use.
+-- SUPER+SHIFT+H/J/K/L move the whole current WORKSPACE to a monitor (as
+-- opposed to SUPER+H/J/K/L above, which moves just the active window).
+-- Together with the default SUPER+SHIFT+1-9 ("move window to workspace N"),
+-- this covers the full app-arranging workflow: move a window to the
+-- workspace slot you want it in, then move that workspace to the monitor
+-- you want it showing on. Same dispatcher Omarchy's own
+-- SUPER+SHIFT+ALT+arrow bindings use. J/K are dead binds for now, same
+-- reason as the SUPER+H/J/K/L block above.
 o.bind("SUPER + SHIFT + H", "Move workspace to left monitor", hl.dsp.workspace.move({ monitor = "l" }))
 o.bind("SUPER + SHIFT + L", "Move workspace to right monitor", hl.dsp.workspace.move({ monitor = "r" }))
+o.bind("SUPER + SHIFT + K", "Move workspace to up monitor", hl.dsp.workspace.move({ monitor = "u" }))
+o.bind("SUPER + SHIFT + J", "Move workspace to down monitor", hl.dsp.workspace.move({ monitor = "d" }))
+
+-- Keybinding review pass: removing Omarchy defaults that either duplicate a
+-- scratchpad binding above (Obsidian/Signal already on ALT+2/ALT+7) or that
+-- aren't used (Music, Music TUI, Editor, Omawrite).
+hl.unbind("SUPER + SHIFT + O") -- Obsidian focus-or-launch, duplicates ALT+2 scratchpad
+hl.unbind("SUPER + SHIFT + G") -- Signal focus-or-launch, duplicates ALT+7 scratchpad
+hl.unbind("SUPER + SHIFT + SLASH") -- Passwords, duplicates ALT+9 Bitwarden scratchpad
+hl.unbind("SUPER + SHIFT + M") -- Music
+hl.unbind("SUPER + SHIFT + ALT + M") -- Music TUI
+hl.unbind("SUPER + SHIFT + N") -- Editor
+hl.unbind("SUPER + SHIFT + W") -- Omawrite
+hl.unbind("SUPER + ALT + F") -- Full width (maximize)
+hl.unbind("SUPER + CTRL + F") -- Tiled full screen
+hl.unbind("SUPER + BACKSPACE") -- Toggle window transparency
+hl.unbind("SUPER + CTRL + BACKSPACE") -- Toggle single-window square aspect
+hl.unbind("SUPER + ALT + Home") -- Save window width
+hl.unbind("SUPER + Home") -- Restore window width
+hl.unbind("SUPER + mouse_down") -- Scroll active workspace forward
+hl.unbind("SUPER + mouse_up") -- Scroll active workspace backward
+hl.unbind("SUPER + SLASH") -- Monitor scaling up
+hl.unbind("SUPER + ALT + SLASH") -- Monitor scaling down
+hl.unbind("ALT + PRINT") -- Screenrecording
+hl.unbind("SUPER + CTRL + PRINT") -- Extract text (OCR) from screenshot
+hl.unbind("SUPER + CTRL + S") -- Share
+hl.unbind("SHIFT + ALT + D") -- Download video from web app
+hl.unbind("SHIFT + ALT + L") -- Copy URL from web app
+hl.unbind("SUPER + CTRL + PERIOD") -- Transcode
+hl.unbind("SUPER + CTRL + O") -- Toggle menu
+hl.unbind("SUPER + SHIFT + CTRL + SPACE") -- Theme menu
+hl.unbind("SUPER + ALT + BRACKETLEFT") -- Make webcam overlay smaller
+hl.unbind("SUPER + ALT + BRACKETRIGHT") -- Make webcam overlay larger
 
 -- Remove all of Omarchy's preinstalled webapp bindings (ChatGPT, Grok,
 -- Calendar, Email, YouTube, WhatsApp, Google Messages/Photos/Maps, X).

@@ -32,14 +32,66 @@ hl.unbind("SUPER + SHIFT + B")
 o.bind("SUPER + SHIFT + RETURN", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 o.bind("SUPER + SHIFT + B", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 
--- Omakub-style app switcher: Alt+1-4 focus-or-launch a fixed set of apps.
+-- Omakub-style app switcher: Alt+1/3/4 focus-or-launch a fixed set of apps.
 -- Reuses the browser_class_pattern and tagged tmux launcher defined above.
 o.bind("ALT + 1", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
-o.bind("ALT + 2", "Obsidian", { launch = "obsidian", focus = "^obsidian$" })
 o.bind("ALT + 3", "File manager", { focus = "^org.gnome.Nautilus$", launch = "nautilus" })
 o.bind("ALT + 4", "Tmux", { focus = "org.omarchy.terminal-tmux", launch = "omarchy-launch-terminal-tmux-tagged" })
-o.bind("ALT + 7", "Signal", { omarchy = "signal" })
 o.bind("ALT + 8", "Activity", { tui = "btop" })
+
+-- "Sometimes" apps (checked occasionally, not worth a permanent workspace
+-- slot) live in their own named special workspace ("scratchpad") instead of
+-- a normal focus-or-launch switch: reachable from any monitor/workspace with
+-- one key, hidden the rest of the time, and the app keeps running in the
+-- background between toggles. A window rule pins any matching window into
+-- special:<name> as soon as it opens; the keybind toggles that workspace's
+-- visibility and launches the app in the background the first time round,
+-- if it isn't already running.
+--
+-- Deliberately no "silent" on the workspace assignment (unlike Omarchy's own
+-- screen-share-preview rule in apps/browser.lua, which uses it to avoid
+-- stealing focus for a popup nobody asked for) - here the workspace is
+-- always toggled visible *before* the app can appear, and the whole point of
+-- pressing the key is to interact with it immediately. "silent" turned out
+-- to suppress focus entirely, not just the view-switch: the window would
+-- show up on screen but keyboard input kept going to whatever was focused
+-- before (caught via `hyprctl activewindow -j` while trying to type into
+-- Obsidian's sign-in form and seeing Brave still reported as focused).
+--
+-- hl.dsp.workspace.toggle_special() can't be the binding's dispatcher
+-- directly, because the shell command also needs to check whether the app
+-- is already running first - so it's invoked via a raw
+-- `hyprctl dispatch 'hl.dsp...(...)'` call inside the shell command instead.
+-- That does work from a plain shell/CLI context (unlike the earlier
+-- `movewindow mon:l` failure elsewhere in this file): the text after
+-- `dispatch` just has to be valid Lua calling a real `hl.dsp.*` builder -
+-- bare unquoted dispatcher syntax isn't, and neither is a quoted plain
+-- string (`hl.dispatch: expected a dispatcher`), but `hl.dsp.foo("bar")`
+-- itself is, and evaluates correctly.
+local function bind_scratchpad(keys, description, name, class_pattern, launch_cmd)
+  o.window(class_pattern, { workspace = "special:" .. name })
+  o.bind(keys, description,
+    "hyprctl dispatch 'hl.dsp.workspace.toggle_special(\"" .. name .. "\")'; "
+      .. "hyprctl clients -j | jq -e '[.[] | select(.class | test(\""
+      .. class_pattern .. "\"))] | length == 0' >/dev/null "
+      .. "&& setsid uwsm-app -- " .. launch_cmd .. " >/dev/null 2>&1 &"
+  )
+end
+
+bind_scratchpad("ALT + 7", "Signal", "signal", "^signal$", "signal-desktop")
+-- Obsidian's window class at open (matched by the rule below) is "obsidian",
+-- but it relabels itself to "md.obsidian.Obsidian" once mapped - an
+-- unanchored pattern is needed so the running-check (which reads the
+-- *current* class from `hyprctl clients`) still recognizes it, or every
+-- toggle press would launch a duplicate instance.
+bind_scratchpad("ALT + 2", "Obsidian", "obsidian", "obsidian", "obsidian")
+
+-- Obsidian opens floating at whatever small size/position it last
+-- remembers (unlike Signal, which already tiles to fill the screen by
+-- default) - `tile = true` didn't override this (Electron apps can force
+-- floating via fixed min/max size hints Hyprland's windowrules can't
+-- unset), so pin an explicit large centered size instead.
+o.window("obsidian", { float = true, center = true, size = { 1500, 810 } })
 
 -- SUPER+H/L move the active WINDOW (not the whole workspace) to the
 -- neighboring monitor, matching the hjkl direction feel from the Ferris

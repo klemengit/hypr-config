@@ -79,6 +79,7 @@ local function bind_scratchpad(keys, description, name, class_pattern, launch_cm
 end
 
 bind_scratchpad("ALT + 7", "Signal", "signal", "^signal$", "signal-desktop")
+bind_scratchpad("ALT + 9", "Bitwarden", "bitwarden", "^Bitwarden$", "bitwarden-desktop")
 -- Obsidian's window class at open (matched by the rule below) is "obsidian",
 -- but it relabels itself to "md.obsidian.Obsidian" once mapped - an
 -- unanchored pattern is needed so the running-check (which reads the

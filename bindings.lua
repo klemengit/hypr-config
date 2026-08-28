@@ -37,7 +37,6 @@ o.bind("SUPER + SHIFT + B", "Browser", { focus = browser_class_pattern, launch =
 o.bind("ALT + 1", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 o.bind("ALT + 3", "File manager", { focus = "^org.gnome.Nautilus$", launch = "nautilus" })
 o.bind("ALT + 4", "Tmux", { focus = "org.omarchy.terminal-tmux", launch = "omarchy-launch-terminal-tmux-tagged" })
-o.bind("ALT + 8", "Activity", { tui = "btop" })
 
 -- "Sometimes" apps (checked occasionally, not worth a permanent workspace
 -- slot) live in their own named special workspace ("scratchpad") instead of
@@ -80,6 +79,13 @@ end
 
 bind_scratchpad("ALT + 7", "Signal", "signal", "^signal$", "signal-desktop")
 bind_scratchpad("ALT + 9", "Bitwarden", "bitwarden", "^Bitwarden$", "bitwarden-desktop")
+-- Activity (btop) used to be a plain { tui = "btop" } bind in the app
+-- switcher above - always opened a *new* terminal, never focused an
+-- existing one. omarchy-launch-tui tags the terminal window with app-id
+-- "org.omarchy.<command>", so it slots into this same pattern like any
+-- other app: singleton for free (no duplicate btop terminals), plus it now
+-- hides/shows instead of piling up as just another tiled window.
+bind_scratchpad("ALT + 8", "Activity", "activity", "^org.omarchy.btop$", "xdg-terminal-exec --app-id=org.omarchy.btop -e btop")
 -- Obsidian's window class at open (matched by the rule below) is "obsidian",
 -- but it relabels itself to "md.obsidian.Obsidian" once mapped - an
 -- unanchored pattern is needed so the running-check (which reads the

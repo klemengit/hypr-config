@@ -8,6 +8,11 @@ hl.config({
     touchpad = {
       natural_scroll = true,
     },
+
+    -- Decouple keyboard focus from mouse hover: focus only changes on click,
+    -- so moving the mouse away from the window you're typing in won't
+    -- de-focus it. (Default is 1: hover always steals keyboard focus.)
+    follow_mouse = 2,
   },
 })
 

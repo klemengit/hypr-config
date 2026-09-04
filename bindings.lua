@@ -38,6 +38,13 @@ o.bind("SUPER + SHIFT + B", "Browser", { focus = browser_class_pattern, launch =
 o.bind("ALT + 1", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 o.bind("ALT + 3", "File manager", { focus = "^org.gnome.Nautilus$", launch = "nautilus" })
 o.bind("ALT + 4", "Herdr", { focus = "org.omarchy.terminal-herdr", launch = "omarchy-launch-terminal-herdr-tagged" })
+-- ALT+5 is the herdr session on linux-turbo, next to ALT+4's local one.
+-- It gets its own window rather than a pane inside the local herdr, because
+-- herdr refuses to nest by default ([experimental] allow_nested) and both
+-- sides would fight over the ctrl+space prefix anyway. Its own app-id keeps
+-- ALT+4 and ALT+5 from focusing each other's window. Plain terminals stay on
+-- SUPER+RETURN.
+o.bind("ALT + 5", "Turbo", { focus = "org.omarchy.terminal-turbo", launch = "launch-terminal-turbo" })
 
 -- "Sometimes" apps (checked occasionally, not worth a permanent workspace
 -- slot) live in their own named special workspace ("scratchpad") instead of

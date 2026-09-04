@@ -17,9 +17,10 @@
 
 -- SUPER+ALT+RETURN was bound to "Tmux" (omarchy-launch-terminal-tmux), which
 -- always opened a new terminal client attached to the tmux session. Rebind it
--- to focus the existing tagged tmux terminal window if one is already open.
+-- to focus the existing tagged herdr terminal window if one is already open
+-- (Omarchy's tmux replacement - migrated from tmux, which is no longer used).
 hl.unbind("SUPER + ALT + RETURN")
-o.bind("SUPER + ALT + RETURN", "Tmux", { focus = "org.omarchy.terminal-tmux", launch = "omarchy-launch-terminal-tmux-tagged" })
+o.bind("SUPER + ALT + RETURN", "Herdr", { focus = "org.omarchy.terminal-herdr", launch = "omarchy-launch-terminal-herdr-tagged" })
 
 -- SUPER+SHIFT+RETURN and SUPER+SHIFT+B were both bound to "Browser"
 -- (omarchy-launch-browser), which always opens a new browser window. Rebind
@@ -33,10 +34,10 @@ o.bind("SUPER + SHIFT + RETURN", "Browser", { focus = browser_class_pattern, lau
 o.bind("SUPER + SHIFT + B", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 
 -- Omakub-style app switcher: Alt+1/3/4 focus-or-launch a fixed set of apps.
--- Reuses the browser_class_pattern and tagged tmux launcher defined above.
+-- Reuses the browser_class_pattern and tagged herdr launcher defined above.
 o.bind("ALT + 1", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })
 o.bind("ALT + 3", "File manager", { focus = "^org.gnome.Nautilus$", launch = "nautilus" })
-o.bind("ALT + 4", "Tmux", { focus = "org.omarchy.terminal-tmux", launch = "omarchy-launch-terminal-tmux-tagged" })
+o.bind("ALT + 4", "Herdr", { focus = "org.omarchy.terminal-herdr", launch = "omarchy-launch-terminal-herdr-tagged" })
 
 -- "Sometimes" apps (checked occasionally, not worth a permanent workspace
 -- slot) live in their own named special workspace ("scratchpad") instead of

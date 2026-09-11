@@ -27,7 +27,7 @@ o.bind("SUPER + ALT + RETURN", "Herdr", { focus = "org.omarchy.terminal-herdr", 
 -- both to focus an existing browser window instead, using the same class
 -- pattern Omarchy's own browser.lua uses to tag chromium/firefox windows.
 -- SUPER+SHIFT+ALT+B (private browsing) is left as always-new, on purpose.
-local browser_class_pattern = "((google-)?[cC]hrom(e|ium)|[bB]rave-browser|[mM]icrosoft-edge|Vivaldi-stable|helium|[fF]irefox|zen|librewolf)"
+local browser_class_pattern = "((google-)?[cC]hrom(e|ium)|[bB]rave-(browser|origin)|[mM]icrosoft-edge|Vivaldi-stable|helium|[fF]irefox|zen|librewolf)"
 hl.unbind("SUPER + SHIFT + RETURN")
 hl.unbind("SUPER + SHIFT + B")
 o.bind("SUPER + SHIFT + RETURN", "Browser", { focus = browser_class_pattern, launch = "omarchy-launch-browser" })

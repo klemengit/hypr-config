@@ -28,5 +28,6 @@ for description, p in pairs(saved) do
     position = (p.x and p.y) and (p.x .. "x" .. p.y) or "auto",
     scale = p.scale or 1.25,
     transform = p.transform,
+    mirror = p.mirror and ("desc:" .. p.mirror) or "",
   })
 end

@@ -204,8 +204,16 @@ hl.unbind("SUPER + SHIFT + ALT + X")
 -- Screenshot: rebind from PRINT (unreachable - not mapped anywhere on the
 -- Ferris Sweep) to SUPER+SHIFT+S (freed up by removing the Google Maps
 -- webapp binding above).
+--
+-- omarchy-snip replaces omarchy-capture-screenshot on the main key. The stock
+-- picker paints a hyprpicker freeze over all three outputs and slurp repaints
+-- its full surface in software on every mouse move, which on this ~20.7 Mpx
+-- canvas makes the drag stutter. omarchy-snip drops the freeze and lowers the
+-- PNG compression level. The stock tool stays on SUPER+SHIFT+ALT+S for when
+-- the freeze is actually wanted - capturing an open menu, or a moving video.
 hl.unbind("PRINT")
-o.bind("SUPER + SHIFT + S", "Screenshot", "omarchy-capture-screenshot")
+o.bind("SUPER + SHIFT + S", "Screenshot", "omarchy-snip")
+o.bind("SUPER + SHIFT + ALT + S", "Screenshot (frozen screen)", "omarchy-capture-screenshot")
 
 -- Change an existing binding by unbinding it first, then binding the key again.
 -- This example changes SUPER+SPACE from the launcher to the Omarchy root menu.

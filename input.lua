@@ -70,3 +70,9 @@ hl.config({
 -- Enable touchpad gestures for moving focus (helpful on scrolling layout).
 -- hl.gesture({ fingers = 3, direction = "left", action = function() hl.dispatch(hl.dsp.focus({ direction = "l" })) end })
 -- hl.gesture({ fingers = 3, direction = "right", action = function() hl.dispatch(hl.dsp.focus({ direction = "r" })) end })
+
+-- Disable the pointing stick (the knob between G/H/B). The Synaptics device
+-- exposes three nodes; the two below are the stick, "-2" is the touchpad.
+-- This also disables the dedicated trackpoint buttons above the touchpad.
+hl.device({ name = "syna30bd:00-06cb:ce08", enabled = false })
+hl.device({ name = "syna30bd:00-06cb:ce08-1", enabled = false })

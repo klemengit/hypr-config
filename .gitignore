@@ -1,2 +1,7 @@
 # Omarchy migrations back up files before rewriting them.
 *.bak.*
+
+# Written by the hyprlayout TUI (https://github.com/klemengit/hyprlayout).
+# Keyed by monitor serial and rewritten on every apply - machine-specific
+# generated state, not source config.
+monitor-layout.lua

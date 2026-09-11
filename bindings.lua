@@ -45,6 +45,11 @@ o.bind("ALT + 4", "Herdr", { focus = "org.omarchy.terminal-herdr", launch = "oma
 -- ALT+4 and ALT+5 from focusing each other's window. Plain terminals stay on
 -- SUPER+RETURN.
 o.bind("ALT + 5", "Turbo", { focus = "org.omarchy.terminal-turbo", launch = "launch-terminal-turbo" })
+-- ALT+6 is the claude-swap live dashboard, focus-or-launch like ALT+4/ALT+5.
+-- omarchy-launch-or-focus-tui derives the app-id from the command basename
+-- ("org.omarchy.cswap") and tags the terminal with it, so repeat presses focus
+-- the existing window instead of stacking up dashboards.
+o.bind("ALT + 6", "cswap watch", "omarchy-launch-or-focus-tui cswap watch")
 
 -- "Sometimes" apps (checked occasionally, not worth a permanent workspace
 -- slot) live in their own named special workspace ("scratchpad") instead of
